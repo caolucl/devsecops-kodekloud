@@ -29,6 +29,15 @@ pipeline {
          }
        }
     }
+    stage('Docker Build and Push') {
+      steps {
+         withDockerRegistry([credentialsId: "dockerhub-caolucl", url: ""]) {
+           sh 'printenv'
+           sh 'sudo docker build -t caolucl/numeric-app:""$GIT_COMMIT"" .'
+           sh 'docker push caolucl/numeric-app:""$GIT_COMMIT""'
+         }
+       }
+     }
   }
 }
       
