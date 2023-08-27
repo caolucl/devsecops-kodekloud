@@ -8,6 +8,7 @@ pipeline {
     imageName = "siddharth67/numeric-app:${GIT_COMMIT}"
     applicationURL="http://devsecops-demo.eastus.cloudapp.azure.com"
     applicationURI="/increment/99"
+    DOCKERHUB_CREDENTIALS=credentials('docker-hub')
   }
 
   stages {
@@ -31,11 +32,10 @@ pipeline {
     }
     stage('Docker Build and Push') {
       steps {
-         withDockerRegistry([credentialsId: "dockerhub-caolucl", url: ""]) {
            sh 'printenv'
+           sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
            sh 'sudo docker build -t caolucl/numeric-app:""$GIT_COMMIT"" .'
            sh 'docker push caolucl/numeric-app:""$GIT_COMMIT""'
-         }
        }
      }
   }
