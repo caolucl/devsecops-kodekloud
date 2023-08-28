@@ -9,6 +9,7 @@ pipeline {
     applicationURL="http://devsecops-demo.eastus.cloudapp.azure.com"
     applicationURI="/increment/99"
     DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+    SONAR_TOKEN = "f54badd7a150ffcb27c641fabceaa40708194caf"
   }
 
   stages {
