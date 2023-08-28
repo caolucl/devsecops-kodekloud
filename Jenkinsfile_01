@@ -41,12 +41,26 @@ pipeline {
          }
        }
      }
+    #stage('SonarQube - SAST') {
+    #   steps {
+    #      sh "mvn sonar:sonar -Dsonar.projectKey=Lex-Testing-Sonar-01 -Dsonar.host.url=http://sonar.lexcil.com -Dsonar.login=$SONAR_TOKEN"
+    #    }
+    # }
     stage('SonarQube - SAST') {
-       steps {
-          //sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=luccaotesting_numbermic-application"
-          sh "mvn sonar:sonar -Dsonar.projectKey=Lex-Testing-Sonar-01 -Dsonar.host.url=http://sonar.lexcil.com -Dsonar.login=$SONAR_TOKEN"
+     steps {
+         withSonarQubeEnv('SonarQubeServer') {
+           sh "mvn sonar:sonar \
+ 	              -Dsonar.projectKey=Lex-Testing-Sonar-01 \
+ 	              -Dsonar.host.url=http://sonar.lexcil.com/"
         }
+        timeout(time: 2, unit: 'MINUTES') {
+           script {
+             waitForQualityGate abortPipeline: true
+           }
+         }
+       }
      }
+    
     stage('Docker Build and Push') {
       steps {
            sh 'printenv'
