@@ -44,9 +44,6 @@ pipeline {
     stage('SonarQube - SAST') {
        steps {
          withSonarQubeEnv('SonarQube') {
-           #sh "mvn sonar:sonar \
-	 	       #       -Dsonar.projectKey=numeric-application \
- 	         #     -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000"
           sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=luccaotesting_numbermic-application"
         }
          timeout(time: 2, unit: 'MINUTES') {
